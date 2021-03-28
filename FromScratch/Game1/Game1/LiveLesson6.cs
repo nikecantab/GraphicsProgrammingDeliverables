@@ -16,7 +16,7 @@ namespace GraphicsProgramming
 		private Texture2D heightmap, dirt, water, foam, waterNormal, sand, grass, snow, plant;
 		private TextureCube sky;
 		private Model cube, sphere, lettuce;
-		private RenderTarget2D rt1, rt2;
+		private RenderTarget2D rt1, rt2, rt3;
 		private Texture2D backBuffer;
 		private Color[] backBufferPixels;
 
@@ -115,6 +115,11 @@ namespace GraphicsProgramming
 									graphics.PreferredBackBufferFormat, graphics.PreferredDepthStencilFormat
 									);
 			rt2 = new RenderTarget2D(graphics.GraphicsDevice,
+									graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight,
+									false,  //no mipmaps
+									graphics.PreferredBackBufferFormat, graphics.PreferredDepthStencilFormat
+									);
+			rt3 = new RenderTarget2D(graphics.GraphicsDevice,
 									graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight,
 									false,  //no mipmaps
 									graphics.PreferredBackBufferFormat, graphics.PreferredDepthStencilFormat
@@ -354,21 +359,26 @@ namespace GraphicsProgramming
 
 			spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, postfx);
 			//////do something//////
-			//Invert
-			postfx.CurrentTechnique = postfx.Techniques["Invert"];
+			//Monochrome
+			postfx.CurrentTechnique = postfx.Techniques["Monochrome"];
 			device.SetRenderTarget(rt1);
 			spriteBatch.Draw(backBuffer, Vector2.Zero, Color.White);
-			//CHroma
-			postfx.CurrentTechnique = postfx.Techniques["ChromaticAberration"];
+			//Swap
+			postfx.CurrentTechnique = postfx.Techniques["SelectiveColorSwap"];
 			device.SetRenderTarget(rt2);
 			spriteBatch.Draw(rt1, Vector2.Zero, Color.White);
+			////////////////////////
+			//CHroma
+			postfx.CurrentTechnique = postfx.Techniques["ChromaticAberration"];
+			device.SetRenderTarget(rt3);
+			spriteBatch.Draw(rt2, Vector2.Zero, Color.White);
 			////////////////////////
 			spriteBatch.End();
 
 			device.SetRenderTarget(null);
 			spriteBatch.Begin();
 			//copy last rendertarget to scrn
-			spriteBatch.Draw(rt2, Vector2.Zero, Color.White);
+			spriteBatch.Draw(rt3, Vector2.Zero, Color.White);
 			spriteBatch.End();
 
 		}

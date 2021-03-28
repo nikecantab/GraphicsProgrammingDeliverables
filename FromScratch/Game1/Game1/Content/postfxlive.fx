@@ -13,6 +13,79 @@ sampler2D _MainTexSampler = sampler_state
 	Texture = <_MainTex>;
 };
 
+float4 NoFXPS(float2 uv : VPOS) : COLOR
+{
+	uv = (uv + 0.5) * float2(1.0 / 1080.0, 1.0 / 1080.0);
+	float4 color = tex2D(_MainTexSampler, uv);
+	//#if OPENGL
+		//uv.y = 1 - uv.y;
+	//#endif
+
+		return color;
+}
+
+technique NoFX
+{
+	pass P0
+	{
+		PixelShader = compile PS_SHADERMODEL NoFXPS();
+	}
+};
+
+
+float4 MonochromePS(float2 uv : VPOS) : COLOR
+{
+	uv = (uv + 0.5) * float2(1.0 / 1080.0, 1.0 / 1080.0);
+	float4 color = tex2D(_MainTexSampler, uv);
+
+	float3 luminosity = float3(0.299, 0.587, 0.114);
+	color.rgb = dot(color.rgb, luminosity);
+
+	//color.rgb = lerp( dot( float3(1,1,1), color.rgb) * 0.3333, c, 0);
+
+	//#if OPENGL
+		//uv.y = 1 - uv.y;
+	//#endif
+
+	return color;
+}
+
+technique Monochrome
+{
+	pass P0
+	{
+		PixelShader = compile PS_SHADERMODEL MonochromePS();
+	}
+};
+
+float4 SelectiveColorSwapPS(float2 uv : VPOS) : COLOR
+{
+	uv = (uv + 0.5) * float2(1.0 / 1080.0, 1.0 / 1080.0);
+	float4 color = tex2D(_MainTexSampler, uv);
+
+	float3 test_color = float3(0, 0, 0);
+	float3 new_color = float3(.6, 0, 0);
+	float threshold = .6;
+
+	float3 diff = test_color - color.rgb;
+
+	if (abs(length(diff)) <= threshold)
+	{
+		color.rgb = new_color * (float3(1, 1, 1) - diff);
+	}
+
+	return color;
+}
+
+technique SelectiveColorSwap
+{
+	pass P0
+	{
+		PixelShader = compile PS_SHADERMODEL SelectiveColorSwapPS();
+	}
+};
+
+
 float4 InvertPS( float2 uv : VPOS ) : COLOR
 {
 	uv = (uv + 0.5) * float2(1.0 / 1080.0, 1.0 / 1080.0);
@@ -64,3 +137,6 @@ technique ChromaticAberration
 	}
 };
 
+//bloom
+
+//snes pixellate effect

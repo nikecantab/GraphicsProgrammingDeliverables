@@ -272,7 +272,3 @@ technique HeatDistortion
         PixelShader = compile PS_SHADERMODEL HeatDistortionPS();
     }
 };
-
-//bloom
-
-//snes pixellate effect
