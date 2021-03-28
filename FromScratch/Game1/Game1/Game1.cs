@@ -16,7 +16,7 @@ namespace GraphicsProgramming
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
 
-			currentLesson = new LiveLesson6();
+			currentLesson = new LiveLesson3();
 		}
 
 		protected override void Initialize()

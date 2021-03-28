@@ -98,6 +98,8 @@ namespace GraphicsProgramming
 			myEffect.Parameters["View"].SetValue(View);
 			myEffect.Parameters["Projection"].SetValue(Matrix.CreatePerspectiveFieldOfView((MathF.PI / 180f) * 25f, device.Viewport.AspectRatio, 0.001f, 1000f));
 
+			myEffect.Parameters["SkyColor"].SetValue(new Vector3(.529f, 0.808f, 0.992f));
+
 			myEffect.Parameters["DayTex"].SetValue(day);
             myEffect.Parameters["NightTex"].SetValue(night);
 			myEffect.Parameters["CloudsTex"].SetValue(clouds);
@@ -125,13 +127,14 @@ namespace GraphicsProgramming
 			device.RasterizerState = RasterizerState.CullCounterClockwise;
 			device.DepthStencilState = DepthStencilState.Default;
 
-			//re-setting parameters because im too lazy to make new samplers for each texture
+            //re-setting parameters because im too lazy to make new samplers for each texture
 
-			//Mars
-			//atmosphere ON
-			//myEffect.Parameters["DayTex"].SetValue(mars);
-			//myEffect.Parameters["NightTex"].SetValue(black);
-			//myEffect.CurrentTechnique = myEffect.Techniques["Earth"];
+            //Mars
+            //atmosphere ON
+   //         myEffect.Parameters["DayTex"].SetValue(mars);
+   //         myEffect.Parameters["NightTex"].SetValue(black);
+			//myEffect.Parameters["SkyColor"].SetValue(new Vector3(0.992f, 0.808f, .529f));
+   //         myEffect.CurrentTechnique = myEffect.Techniques["Earth"];
 
             //atmosphere OFF
             myEffect.Parameters["MoonTex"].SetValue(mars);
